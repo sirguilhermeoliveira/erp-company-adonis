@@ -5,7 +5,6 @@ import { TListOneUserOptions } from '../types';
 export class ListOneUserRepository {
   public async handle(options: TListOneUserOptions) {
  const user = await User.findBy('secure_id', options.secureId)
-    console.log(user)
     if (!user) {
       throw new NotFoundException(
         'There is no user for this id.',

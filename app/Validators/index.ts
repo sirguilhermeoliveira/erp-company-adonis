@@ -1,4 +1,5 @@
 export * from './CustomMessages'
 export * from './User/UserStoreValidator'
 export * from './User/UserUpdateValidator'
-export * from './Session/SessionStoreValidator'
+export * from './Post/PostStoreValidator'
+export * from './Post/PostUpdateValidator'
