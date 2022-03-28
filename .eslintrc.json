@@ -2,15 +2,6 @@
   "extends": ["plugin:adonis/typescriptApp", "prettier"],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": ["error", {"endOfLine": "auto"}],
-        "@typescript-eslint/naming-convention": [
-      "error",
-      {
-        "selector": "interface",
-        "prefix": ["I"],
-        "format": ["PascalCase"]
-      }
-    ],
-    
+    "prettier/prettier": ["error"]
   }
 }

@@ -1,12 +1,11 @@
+import { JWTGuardConfig, JWTGuardContract } from "@ioc:Adonis/Addons/Jwt";
+
 /**
  * Contract source: https://git.io/JOdz5
  *
  * Feel free to let us know via PR, if you find something broken in this
  * file.
  */
-
-import auth from 'App/Models/Auth'
-import { JWTGuardConfig, JWTGuardContract } from '@ioc:Adonis/Addons/Jwt'
 
 declare module '@ioc:Adonis/Addons/Auth' {
   /*
@@ -27,16 +26,16 @@ declare module '@ioc:Adonis/Addons/Auth' {
     | User Provider
     |--------------------------------------------------------------------------
     |
-    | The following provider uses Lucid models as a driver for fetching user
-    | details from the database for authentication.
+    | The following provider directlly uses Database query builder for fetching
+    | user details from the database for authentication.
     |
     | You can create multiple providers using the same underlying driver with
-    | different Lucid models.
+    | different database tables.
     |
     */
     user: {
-      implementation: LucidProviderContract<typeof auth>
-      config: LucidProviderConfig<typeof auth>
+      implementation: DatabaseProviderContract<DatabaseProviderRow>
+      config: DatabaseProviderConfig
     }
   }
 
@@ -70,8 +69,8 @@ declare module '@ioc:Adonis/Addons/Auth' {
       config: SessionGuardConfig<'user'>
     }
     jwt: {
-      implementation: JWTGuardContract<'user', 'api'>
-      config: JWTGuardConfig<'user'>
-    }
+      implementation: JWTGuardContract<'user', 'api'>,
+      config: JWTGuardConfig<'user'>,
+    };
   }
 }

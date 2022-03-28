@@ -1,6 +1,12 @@
 import { IUserDTO } from 'App/Dtos'
-import User from 'App/Models/User'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import {
+  CreateUserService,
+  ListAllUsersService,
+  ListOneUserService,
+  UpdateUserService,
+  DeleteUserService,
+} from 'App/Modules/User/Services';
 
 export interface IUserRequest {
   user: IUserDTO
@@ -15,63 +21,32 @@ export type TypeListAllUserOptions = {
 }
 
 export default class UsersController {
-  public async index({ response }) {
-    const users = await User.all()
-
-    return response.ok(users)
+  public async index({ response }: HttpContextContract) {
+     return new ListAllUsersService().execute(response) 
 }
 
-  public async store({ request, response }) {
-    const userSchema = schema.create({
-        title: schema.string({ trim: true }, [
-            rules.maxLength(255)
-        ]),
-        content: schema.string({ escape: true }, [
-            rules.maxLength(1000)
-        ]),
-    })
-
-    const payload: any = await request.validate({ schema: userSchema })
-    const user: User = await User.create(payload)
-
-    return response.ok(user)
+  public async store({ request }) {
+    const user = request.body() as IUserDTO;
+    return new CreateUserService().execute({ request, user });
 }
 
-public async show({ params, response }) {
-  const { id }: { id: number } = params
-
-  const user: any = await User.find(id)
-  if (!user) {
-      return response.notFound({ message: 'User not found' })
-  }
-
-  return response.ok(user)
+public async show({ params }) {
+  return new ListOneUserService().execute({ secureId: params.id });
 }
 
-public async update({ request, params, response }) {
-  const userSchema = schema.create({
-      title: schema.string({ trim: true }, [
-          rules.maxLength(255)
-      ]),
-      content: schema.string({ escape: true }, [
-          rules.maxLength(1000)
-      ]),
-  })
+public async update({ request, params }) {
+  const user = request.body() as IUserDTO;
+  const secureId = params.id
 
-  const payload: any = await request.validate({ schema: userSchema })
+  return new UpdateUserService().execute({ request, user, secureId });
+}
 
-  const { id }: { id: number } = params
+public async destroy({ response, params }: HttpContextContract) {
+  await new DeleteUserService().execute({ secureId: params.id });
 
-  const user: any = await User.find(id)
-  if (!user) {
-      return response.notFound({ message: 'User not found' })
-  }
-
-  user.title = payload.title
-  user.content = payload.content
-
-  await user.save()
-
-  return response.ok(user)
+  return response
+    .status(200)
+    .send({ message: 'User deleted successfully ' });
 }
 }
+
