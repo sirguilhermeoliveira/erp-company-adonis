@@ -6,6 +6,7 @@ export class PostStoreValidator {
 
   public schema = schema.create({
     content: schema.string({}, [rules.required()]),
+    user_secure_id: schema.string({}, [rules.required()]),
     image: schema.string.optional(),
   });
 }

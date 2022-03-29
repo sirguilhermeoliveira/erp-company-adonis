@@ -20,7 +20,7 @@ export type TypeListAllPostOptions = {
   noPaginate: boolean
 }
 
-export default class UsersController {
+export default class PostsController {
   public async index({ response }: HttpContextContract) {
     return new ListAllPostsService().execute(response)
   }

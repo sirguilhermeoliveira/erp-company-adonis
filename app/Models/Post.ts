@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import User from './User'
-import { BaseModel, column, BelongsTo, belongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { v4 as uuidV4 } from 'uuid'
+import { BaseModel, column, BelongsTo, belongsTo, beforeCreate } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -8,6 +9,11 @@ export default class Post extends BaseModel {
 
   @column()
   public secure_id: string
+
+  @beforeCreate()
+  public static async CreateUUID(model: User): Promise<void> {
+    model.secure_id = uuidV4()
+  }
 
   @column()
   public user_id: number

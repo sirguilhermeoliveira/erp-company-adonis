@@ -6,3 +6,4 @@ Route.get('/', async () => {
 
 import './routes/auth'
 import './routes/users'
+import './routes/posts'
