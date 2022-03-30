@@ -39,8 +39,8 @@ export default class User extends BaseModel {
   public updatedAt: DateTime
 
   @hasMany(() => Post, {
-    localKey: 'post_id',
-    foreignKey: 'id',
+    localKey: 'id',
+    foreignKey: 'user_id',
   })
   public post: HasMany<typeof Post>;
 }
